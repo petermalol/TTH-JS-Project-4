@@ -28,7 +28,7 @@ class Game{
         overlay.style.display = "none";
         this.activePhrase = this.getRandomPhrase()
         this.activePhrase.addPhraseToDisplay()
-        console.log(this.activePhrase)
+        console.log(this.activePhrase) //optional help
     }
 
     //chooses random phrase and returns it
@@ -39,7 +39,6 @@ class Game{
 
     //checks inputed letter and acts if its right, otherwise sends to removeLife
     handleInteraction(guess){
-        console.log(guess)
         if(this.activePhrase.checkLetter(guess)){
             this.activePhrase.showMatchedLetter(guess)
             
@@ -51,7 +50,6 @@ class Game{
 
     //disables wrongly guessed letter, changes class to "wrong" and changes hearts to lostHeart
     removeLife(guess){
-        console.log("Removed life")
         guess.disabled = true;
         guess.classList.add ("wrong")
         let tries = document.querySelectorAll(".tries")
@@ -81,13 +79,6 @@ class Game{
         while (phraseHolder.firstChild){
             phraseHolder.removeChild(phraseHolder.firstChild)
         }
-        keyboard.forEach((row) => {
-            row.removeEventListener("click", (event) => {
-                if (event.target.tagName === "BUTTON") {
-                    game.handleInteraction(event.target)
-                }
-            })
-        })
         document.querySelectorAll(".key").forEach((letter) => {letter.disabled = false})
         document.querySelectorAll(".wrong").forEach((letter) => {letter.classList.remove("wrong")})
         document.querySelectorAll(".chosen").forEach((letter) => {letter.classList.remove("chosen")})
