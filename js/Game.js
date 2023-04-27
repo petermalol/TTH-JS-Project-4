@@ -3,9 +3,22 @@
  * Game.js */
 
 class Game{
-    constructor(missed, phrases, activePhrase){
-        this.missed = missed;
-        this.phrases = phrases;
+    constructor(){
+        this.missed = 0;
+        this.phrases = [
+            new Phrase("Hello World"),
+            new Phrase("Goodbye World"),
+            new Phrase("You Win"),
+            new Phrase("You Lose"),
+            new Phrase("Is this thing on"),
+            new Phrase("I love Javascript"),
+            new Phrase("I am lost"),
+            new Phrase("To err is to be"),
+            new Phrase("To do is to be"),
+            new Phrase("To be is to do"),
+            new Phrase("Do be do be do"),
+            new Phrase("Scooby do")
+        ];
         this.activePhrase = null;
     }
 
@@ -15,34 +28,30 @@ class Game{
         overlay.style.display = "none";
         this.activePhrase = this.getRandomPhrase()
         this.activePhrase.addPhraseToDisplay()
+        console.log(this.activePhrase)
     }
 
     //chooses random phrase and returns it
     getRandomPhrase(){
-        let randomPhrase = this.phrases[Math.floor(Math.random() * 12)]
-        return new Phrase(randomPhrase)
+        let randomPhrase = this.phrases[Math.floor(Math.random() * this.phrases.length)]
+        return randomPhrase;
     }
 
     //checks inputed letter and acts if its right, otherwise sends to removeLife
     handleInteraction(guess){
-        this.activePhrase //i have no idea why but if i remove this line it shows errors that this.activePhrase is null, also works if it is written like console.log(this.activePhrase)
-        if(this.activePhrase.checkLetter(guess) == true){
-            phraseHolder.childNodes.forEach(letter => {
-                if(letter.textContent == guess.textContent){
-                    //when inputed letter is found, disable and marked as right guess
-                    letter.classList.replace("letter", "show")
-                    guess.disabled = true;
-                    guess.classList.add("chosen")
-                    this.checkForWin()
-                }
-            });
+        console.log(guess)
+        if(this.activePhrase.checkLetter(guess)){
+            this.activePhrase.showMatchedLetter(guess)
+            
         }else{
             this.removeLife(guess)
         }
+        this.checkForWin()
     }
 
     //disables wrongly guessed letter, changes class to "wrong" and changes hearts to lostHeart
     removeLife(guess){
+        console.log("Removed life")
         guess.disabled = true;
         guess.classList.add ("wrong")
         let tries = document.querySelectorAll(".tries")
@@ -68,11 +77,17 @@ class Game{
 
     //resets game and shows endscreen
     gameOver(endMessage){
-        this.activePhrase = null
         document.removeEventListener("keydown", findPressedKey)
         while (phraseHolder.firstChild){
             phraseHolder.removeChild(phraseHolder.firstChild)
         }
+        keyboard.forEach((row) => {
+            row.removeEventListener("click", (event) => {
+                if (event.target.tagName === "BUTTON") {
+                    game.handleInteraction(event.target)
+                }
+            })
+        })
         document.querySelectorAll(".key").forEach((letter) => {letter.disabled = false})
         document.querySelectorAll(".wrong").forEach((letter) => {letter.classList.remove("wrong")})
         document.querySelectorAll(".chosen").forEach((letter) => {letter.classList.remove("chosen")})
@@ -80,5 +95,6 @@ class Game{
         document.getElementById("overlay").style.display = "flex";
         startGameBtn.textContent = "Start New Game"
         document.getElementById("game-over-message").textContent = endMessage
+        this.activePhrase = null
     }
 }

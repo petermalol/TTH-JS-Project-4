@@ -36,4 +36,14 @@ class Phrase {
         })) 
         return letterIsPresent;
     }
+
+    showMatchedLetter(guess){
+        phraseHolder.childNodes.forEach(letter => {
+            if (letter.textContent === guess.textContent){
+                letter.classList.replace("letter", "show")
+                guess.disabled = true;
+                guess.classList.add("chosen")
+            }
+        });
+    }
 }

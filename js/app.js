@@ -9,20 +9,6 @@ Create a new instance of the Game class and add event listeners for the start bu
     Event delegation can also be used in order to avoid having to add an event listener to each individual keyboard button. 
     Clicking the space between and around the onscreen keyboard buttons should not result in the handleInteraction() method being called.
 */
-let phraseList = [
-    "Hello World",
-    "Goodbye World",
-    "You Win",
-    "You Lose",
-    "Is this thing on",
-    "I love Javascript",
-    "I am lost",
-    "To err is to be",
-    "To do is to be",
-    "To be is to do",
-    "Do be do be do",
-    "Scooby do"
-]
 
 let phraseHolder = document.querySelector("#phrase ul")
 const keyboard = document.querySelectorAll(".keyrow")
@@ -30,21 +16,26 @@ let startGameBtn = document.getElementById("btn__reset")
 
 startGameBtn.addEventListener("click", createGame)
 
+
 function createGame(){
-    let game = new Game (0, phraseList, null)
-    game.startGame()
+    game = new Game();
+    game.activePhrase = null;
+    game.startGame();
 
     //create keyboard input
     document.addEventListener("keydown", findPressedKey)
-
+    
     //create eventlistener for each button
     keyboard.forEach((row) => {
-        row.addEventListener("click", (event) => {
-            if (event.target.tagName === "BUTTON") {
-                game.handleInteraction(event.target)
-            }
-        })
+        row.addEventListener("click", clickAction)
     })
+
+}
+
+function clickAction(event){
+    if (event.target.tagName === "BUTTON") {
+        game.handleInteraction(event.target)
+    }
 }
 
 function findPressedKey(event) {
