@@ -41,7 +41,6 @@ class Game{
     handleInteraction(guess){
         if(this.activePhrase.checkLetter(guess)){
             this.activePhrase.showMatchedLetter(guess)
-            
         }else{
             this.removeLife(guess)
         }
@@ -58,7 +57,13 @@ class Game{
         this.missed = this.missed + 1
         //if missed becomes 5 it sends player to gameOver with message "You lost"
         if(this.missed == 5){
-            this.gameOver("You lost :( ")
+            let endMessage = "You lost :("
+            if (overlay.classList.contains("win")){
+                overlay.classList.replace("win", "lose")
+            }else {
+                overlay.classList.add("lose")
+            }
+            this.gameOver(endMessage)
         }
     }
 
@@ -70,7 +75,15 @@ class Game{
                 gameOverCondition = false;
             }
         })
-        if(gameOverCondition == true){this.gameOver("You Win!!! :D")}
+        if(gameOverCondition == true && this.missed != 5){
+            let endMessage = "You Win!!! :D"
+            if (overlay.classList.contains("lose")){
+                overlay.classList.replace("lose", "win")
+            }else {
+                overlay.classList.add("win")
+            }
+            this.gameOver(endMessage)
+        }
     }
 
     //resets game and shows endscreen
